@@ -15,6 +15,8 @@ find_package(Qt5 COMPONENTS
 	OpenGL
 	REQUIRED)
 
+message(STATUS "Found Qt5 - version ${Qt5_VERSION}" )
+
 add_executable(qgle WIN32 MACOSX_BUNDLE
 	3dviewer.cpp
 	about.cpp
@@ -75,11 +77,11 @@ if(UNIX OR APPLE)
 endif()
 
 list(APPEND QGLE_LIBRARIES
-	Qt::Core
-	Qt::Gui
-	Qt::Network
-	Qt::Widgets
-	Qt::OpenGL
+	Qt5::Core
+	Qt5::Gui
+	Qt5::Network
+	Qt5::Widgets
+	Qt5::OpenGL
 	${CAIRO_LIBRARIES}
 	${CMAKE_DL_LIBS}
 )
@@ -136,9 +138,11 @@ target_link_libraries ( qgle LINK_PUBLIC
 
 if(UNIX AND NOT APPLE)
  	target_link_options(qgle PUBLIC -no-pie)
-	qt_import_plugins( qgle
-  		INCLUDE_BY_TYPE platforms
-	)
+	if (Qt5_VERSION VERSION_GREATER_EQUAL 5.15)
+		qt_import_plugins( qgle
+			INCLUDE_BY_TYPE platforms
+		)
+	endif()
 endif()
 
 if(APPLE)
