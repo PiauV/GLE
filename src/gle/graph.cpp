@@ -104,6 +104,7 @@ void do_key(int& ct);
 void do_vscale(int& ct);
 void do_scale(int& ct);
 void do_colormap(int& ct);
+void do_matrix(int& ct);
 void do_main_title(int& ct);
 void do_noticks(int& ct);
 void do_names(int& ct);
@@ -495,6 +496,9 @@ bool execute_graph(GLESourceLine& sline, bool isCommandCheck, GLEGraphBlockInsta
 	} else kw("COLORMAP") {
 		if (isCommandCheck) return true;
 		do_colormap(ct);
+	} else kw("MATRIX") {
+		if (isCommandCheck) return true;
+		do_matrix(ct);
 	} else kw("TITLE") {
 		if (isCommandCheck) return true;
 		do_main_title(ct);
@@ -862,6 +866,28 @@ void do_colormap(int& ct) {
 			g_colormap->setPalette(tmp);
 		}
 		else g_throw_parser_error("expecting colormap sub command, not '", tk[ct], "'");
+		ct++;
+	}
+	g_colormap->readData();
+}
+
+void do_matrix(int& ct) {
+	g_colormap = new GLEColorMap();
+	g_colormap->setFunction(tk[++ct]);
+	g_colormap->setWidth(0);
+	g_colormap->setHeight(0);
+	g_colormap->setIpolType(IPOL_TYPE_DISCRETE);
+	ct++;
+	while (ct <= ntk) {
+		kw("ZMIN") g_colormap->setZMin(next_exp);
+		else kw("ZMAX") g_colormap->setZMax(next_exp);
+		else kw("PALETTE") {
+			string tmp;
+			next_str_cpp(tmp);
+			str_to_uppercase(tmp);
+			g_colormap->setPalette(tmp);
+		}
+		else g_throw_parser_error("expecting matrix sub command, not '", tk[ct], "'");
 		ct++;
 	}
 	g_colormap->readData();

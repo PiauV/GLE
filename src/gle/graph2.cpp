@@ -3882,19 +3882,37 @@ void GLEColorMapBitmap::checkColormapResolution() {
 	// width and height of data points (graph coordinates)
 	double data_width = (bounds->getXMax() - bounds->getXMin()) / double(m_Data->getNX());
 	double data_height = (bounds->getYMax() - bounds->getYMin()) / double(m_Data->getNY());
-	// width and height of colormap cells (graph coordinates)
-	double cell_width = fnxInv(m_origin.getX() + m_size.getX() / getWidth(), &xx[GLE_AXIS_X]) - fnxInv(m_origin.getX(), &xx[GLE_AXIS_X]);
-	double cell_height = fnxInv(m_origin.getY() + m_size.getY() / getHeight(), &xx[GLE_AXIS_Y]) - fnxInv(m_origin.getY(), &xx[GLE_AXIS_Y]);
-	// print some warnings if necessary
-	if (cell_width > 1.05*data_width){ // 5% margin to avoid spurious warnings
-		gprint("Warning: colormap is coarser than the dataset along x.");
-		gprint("Cell width = " + std::to_string(cell_width));
-		gprint("Data width = " + std::to_string(data_width));
+	// 'discrete' method with 0 resolution (or 'matrix' command)
+	// => calculate the appropriate number of cells to match with the 2D dataset
+	if (m_map->getIpolType() == IPOL_TYPE_DISCRETE && getWidth() == 0 && getHeight() == 0) {
+		// total width and height of the colormap, taking into account the axis' limits (graph coordinates)
+		double total_width = fnxInv(m_origin.getX() + m_size.getX(),&xx[GLE_AXIS_X]) - fnxInv(m_origin.getX(),&xx[GLE_AXIS_X]);
+		double total_height = fnxInv(m_origin.getY() + m_size.getY(),&xx[GLE_AXIS_Y]) - fnxInv(m_origin.getY(),&xx[GLE_AXIS_Y]);
+		// set the resolution of the GLEColorMapBitmap
+		m_Width = gle_round_int(total_width/data_width);
+		m_Height = gle_round_int(total_height/data_height);
+		// set the resolution of the GLEColorMap
+		m_map->setWidth(m_Width);
+		m_map->setHeight(m_Height);
+		//std::cout << getWidth() << " " << getHeight() << std::endl;
+		//std::cout << total_width << " " << total_height << std::endl;
 	}
-	if (cell_height > 1.05*data_height){ // 5% margin to avoid spurious warnings
-		gprint("Warning: colormap is coarser than the dataset along y.");
-		gprint("Cell height= " + std::to_string(cell_height));
-		gprint("Data height = " + std::to_string(data_height));
+	else{
+		// when the resolution is set manually, check that it is adapted to the data
+		// width and height of colormap cells (graph coordinates)
+		double cell_width = fnxInv(m_origin.getX() + m_size.getX() / getWidth(),&xx[GLE_AXIS_X]) - fnxInv(m_origin.getX(),&xx[GLE_AXIS_X]);
+		double cell_height = fnxInv(m_origin.getY() + m_size.getY() / getHeight(),&xx[GLE_AXIS_Y]) - fnxInv(m_origin.getY(),&xx[GLE_AXIS_Y]);
+		// print some warnings if necessary
+		if (cell_width > 1.05*data_width){ // 5% margin to avoid spurious warnings
+			gprint("Warning: colormap is coarser than the dataset along x.");
+			gprint("Cell width = " + std::to_string(cell_width));
+			gprint("Data width = " + std::to_string(data_width));
+		}
+		if (cell_height > 1.05*data_height){ // 5% margin to avoid spurious warnings
+			gprint("Warning: colormap is coarser than the dataset along y.");
+			gprint("Cell height= " + std::to_string(cell_height));
+			gprint("Data height = " + std::to_string(data_height));
+		}
 	}
 }
 
