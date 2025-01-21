@@ -3932,8 +3932,10 @@ void GLEColorMapBitmap::plotData(GLEZData* zdata, GLEByteStream* output) {
 	if (m_map->hasZMax()) zmax = m_map->getZMax();
 	IpolDoubleMatrix ipd(zdata->getData(), zdata->getNX(), zdata->getNY());
 	std::unique_ptr<Ipol> ipol;
-	if (m_map->getIpolType() == IPOL_TYPE_BICUBIC) {
+	if (m_map->getIpolType() == IPOL_TYPE_BICUBIC) { // default
 		ipol.reset(new BicubicIpol(&ipd));
+	} else if (m_map->getIpolType() == IPOL_TYPE_DISCRETE) {
+		ipol.reset(new DiscreteIpol(&ipd));
 	} else {
 		ipol.reset(new NearestIpol(&ipd));
 	}

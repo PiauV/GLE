@@ -848,6 +848,8 @@ void do_colormap(int& ct) {
 				ipolType = IPOL_TYPE_BICUBIC;
 			} else if (str_i_equals(tmp, "NEAREST")) {
 				ipolType = IPOL_TYPE_NEAREST;
+			} else if (str_i_equals(tmp, "DISCRETE")) {
+				ipolType = IPOL_TYPE_DISCRETE;
 			} else {
 				g_throw_parser_error("unknown interpolation type '", tmp.c_str(), "'");
 			}
