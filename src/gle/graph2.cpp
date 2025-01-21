@@ -3833,6 +3833,7 @@ public:
 	inline double getZMax() { return m_ZMax; }
 	inline bool isFunction() { return m_Data == NULL; }
 	inline GLEZData* getData() { return m_Data; }
+	void checkColormapResolution();
 private:
 	void updateScanLine(int* pos, double zvalue);
 	void init();
@@ -3868,7 +3869,33 @@ int GLEColorMapBitmap::readHeader() {
 		setMode(GLE_BITMAP_GRAYSCALE);
 		setComponents(1);
 	}
+
+	if (m_Data){
+		checkColormapResolution();
+	}
 	return GLE_IMAGE_ERROR_NONE;
+}
+
+void GLEColorMapBitmap::checkColormapResolution() {
+	if (!m_Data) return;
+	GLERectangle* bounds = m_Data->getBounds();
+	// width and height of data points (graph coordinates)
+	double data_width = (bounds->getXMax() - bounds->getXMin()) / double(m_Data->getNX());
+	double data_height = (bounds->getYMax() - bounds->getYMin()) / double(m_Data->getNY());
+	// width and height of colormap cells (graph coordinates)
+	double cell_width = fnxInv(m_origin.getX() + m_size.getX() / getWidth(), &xx[GLE_AXIS_X]) - fnxInv(m_origin.getX(), &xx[GLE_AXIS_X]);
+	double cell_height = fnxInv(m_origin.getY() + m_size.getY() / getHeight(), &xx[GLE_AXIS_Y]) - fnxInv(m_origin.getY(), &xx[GLE_AXIS_Y]);
+	// print some warnings if necessary
+	if (cell_width > 1.05*data_width){ // 5% margin to avoid spurious warnings
+		gprint("Warning: colormap is coarser than the dataset along x.");
+		gprint("Cell width = " + std::to_string(cell_width));
+		gprint("Data width = " + std::to_string(data_width));
+	}
+	if (cell_height > 1.05*data_height){ // 5% margin to avoid spurious warnings
+		gprint("Warning: colormap is coarser than the dataset along y.");
+		gprint("Cell height= " + std::to_string(cell_height));
+		gprint("Data height = " + std::to_string(data_height));
+	}
 }
 
 int fixRange(int v, int min, int max) {
