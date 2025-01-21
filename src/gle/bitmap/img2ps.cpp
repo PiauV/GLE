@@ -644,6 +644,16 @@ double NearestIpol::ipol(double xp, double yp) {
 	return m_Data->getValue(gle_round_int(xp * m_Data->getWidth()), gle_round_int(yp * m_Data->getHeight()));
 }
 
+DiscreteIpol::DiscreteIpol(IpolData* data):
+	m_Data(data)
+{
+}
+
+double DiscreteIpol::ipol(double xp, double yp) {
+	return m_Data->getValue((int)floor(xp * m_Data->getWidth()), (int)floor(yp * m_Data->getHeight()));
+}
+
+
 void GLEBitmapSetPalette(GLEBYTE* pal, int offs, double red, double green, double blue) {
 	int i_red = (int)floor(red*255+0.5);
 	int i_green = (int)floor(green*255+0.5);

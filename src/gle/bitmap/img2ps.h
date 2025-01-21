@@ -380,7 +380,8 @@ private:
 enum IpolType
 {
 	IPOL_TYPE_BICUBIC,
-	IPOL_TYPE_NEAREST
+	IPOL_TYPE_NEAREST,
+	IPOL_TYPE_DISCRETE
 };
 
 class IpolData {
@@ -425,6 +426,14 @@ protected:
 	IpolData* m_Data;
 public:
 	NearestIpol(IpolData* data);
+	virtual double ipol(double xp, double yp);
+};
+
+class DiscreteIpol: public Ipol {
+protected:
+	IpolData* m_Data;
+public:
+	DiscreteIpol(IpolData* data);
 	virtual double ipol(double xp, double yp);
 };
 
