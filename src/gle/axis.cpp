@@ -573,6 +573,7 @@ void draw_axis(GLEAxis *ax, GLERectangle* box, DrawAxisPart drawPart) {
 	g_set_line_style(ax->label_lstyle);
 	g_set_font(ax->label_font);
 	g_set_hei(h*g_get_fconst(GLEC_ALABELSCALE));
+	g_set_texfontsize(ax->label_fsize);
 	double maxd = 0, maxh = 0, maxw = 0;
 	GLEMeasureBox measure;
 	measure.measureStart();
@@ -732,6 +733,7 @@ void draw_axis_titles(GLEAxis *ax, double h, double ox, double oy, GLEMeasureBox
 	g_set_color(ax->title_color);
 	g_set_font(ax->title_font);
 	g_set_hei(th);
+	g_set_texfontsize(ax->title_fsize);
 	double tdist = ax->title_dist;
 	if (ax->title_adist >= 0.0) {
 		// absolute distance from axis side
@@ -839,6 +841,7 @@ void draw_axis_titles_v35(GLEAxis *ax, double h, double ox, double oy, double dt
 	g_set_color(ax->title_color);
 	g_set_font(ax->title_font);
 	g_set_hei(th);
+	g_set_texfontsize(ax->title_fsize);
 	g_measure(ax->title,&bl,&br,&bu,&bd);
 	switch (ax->type) {
 		case GLE_AXIS_X:
@@ -1178,7 +1181,7 @@ void GLEAxis::init(int i) {
 	names.clear(); places.clear(); noplaces.clear();
 	base = 0.0; length = 0.0; shift = 0.0;
 	label_align = JUST_RIGHT;
-	label_font = 0; label_hei = 0.0; label_scale = 0.0; label_dist = 0.0;
+	label_font = 0; label_hei = 0.0; label_fsize = 0; label_scale = 0.0; label_dist = 0.0;
 	log = 0; nofirst = 0; nolast = 0;
 	nticks = 0; nsubticks = 0; dticks = 0.0; dsubticks = 0.0;
 	ticks_length = 0.0; ticks_scale = 0.0; ticks_lstyle[0] = 0;
@@ -1188,7 +1191,7 @@ void GLEAxis::init(int i) {
 	label_off = (i != GLE_AXIS_X && i != GLE_AXIS_Y);
 	side_off = 0; ticks_off = 0; subticks_off = 0;
 	side_lstyle[0] = 0;
-	title_font = 0; title_dist = 0.0; title_adist = -1.0; title_hei = 0.0; title_scale = 0.0;
+	title_font = 0; title_dist = 0.0; title_adist = -1.0; title_hei = 0.0; title_scale = 0.0; title_fsize = 0;
 	title_rot = 0; title_off = 0; title_color = 0;
 	negate = 0;
 	names_ds = -1;

@@ -185,6 +185,7 @@ void GLEKeyBlockInstance::executeLine(GLESourceLine& sline)	{
 		else kw("COMPACT") m_info.setCompact(true);
 		else kw("OFF") m_info.setDisabled(true);
 		else kw("HEI") m_info.setHei(next_exp);
+		else kw("FONTSIZE") m_info.setFontSize(next_exp);
 		else kw("POSITION") next_str(m_info.getJustify());
 		else kw("POS") next_str(m_info.getJustify());
 		else kw("BOXCOLOR") m_info.setBoxColor(next_color);
@@ -332,6 +333,7 @@ KeyInfo::KeyInfo() {
 	m_ExtraY = 0.0;
 	m_BackgroundColor = g_get_fill_clear();
 	m_col = 0;
+	m_FontSize = 0;
 	strcpy(m_Justify, "");
 }
 
@@ -595,7 +597,8 @@ void measure_key(KeyInfo* info) {
 	g_get_hei(&save_hei);
 	g_get_bounds(&save_bounds);
 	if (!info->hasHei()) {
-		info->setHei(save_hei);
+		if (!info->hasFontSize()) info->setHei(save_hei);
+		else info->setHei(g_get_hei_from_texfontsize(info->getFontSize()));
 	}
 	double khei = info->getHei();
 	if (!info->hasBase()) {
@@ -766,6 +769,7 @@ void do_draw_key(double ox, double oy, bool notxt, KeyInfo* info) {
 	double khei = info->getHei();
 	double rowhi = info->getBase();
 	g_set_hei(khei);
+	g_set_texfontsize(info->getFontSize());
 	for (int i = 0; i < info->getNbEntries(); i++) {
 		KeyEntry* entry = info->getEntry(i);
 		if (prev_col != entry->column) {

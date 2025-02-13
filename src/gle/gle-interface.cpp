@@ -153,6 +153,7 @@ m_FileInfoMap(NULL){
 	m_TextModel = new GLEPropertyStoreModel();
 	m_TextModel->add(new GLEPropertyFont("Font"));
 	m_TextModel->add(new GLEPropertyHei("Font size"));
+	m_TextModel->add(new GLEPropertyTeXFontSize("LaTeX font size"));
 	m_TextModel->add(new GLEPropertyColor("Text color"));
 	m_TextModel->add(new GLEPropertyJustify("Text justify"));
 
@@ -516,6 +517,7 @@ void GLEInterface::renderText(GLETextDO* text, GLEPropertyStore* prop) {
 	g_set_font_width(-1);
 	g_set_line_style("1");
 	g_set_line_width(0.02);
+	g_set_texfontsize(prop->getIntProperty(GLEDOPropertyTeXFontSize));
 	// Select the font
 	GLEFont* font = prop->getFontProperty(GLEDOPropertyFont);
 	if (font == NULL) {
@@ -725,6 +727,7 @@ void GLEInterface::initTextProperties(GLEPropertyStore* prop) {
 	prop->setRealProperty(GLEDOPropertyFontSize, fontsize);
 	g_get_font(&font);
 	prop->setFontProperty(GLEDOPropertyFont, getFontIndex(font));
+	prop->setIntProperty(GLEDOPropertyTeXFontSize, g_get_texfontsize());
 }
 
 extern GLEGlobalSource* g_Source;
@@ -1048,6 +1051,7 @@ GLEObjectDOConstructor::GLEObjectDOConstructor(GLESub* sub) {
 	add(linecap);
 	add(new GLEPropertyFont("Font"));
 	add(new GLEPropertyHei("Font size"));
+	add(new GLEPropertyTeXFontSize("TeX font size"));
 }
 
 GLEObjectDOConstructor::~GLEObjectDOConstructor() {
@@ -1686,6 +1690,7 @@ void GLEObjectDO::render() {
 		double hei = prop->getRealProperty(GLEDOPropertyFontSize);
 		if (hei == 0.0) g_set_hei(0.3633);
 		else g_set_hei(hei);
+		g_set_texfontsize(prop->getIntProperty(GLEDOPropertyTeXFontSize));
 		g_set_font_width(-1);
 		g_set_line_style("1");
 		g_set_line_width(prop->getRealProperty(GLEDOPropertyLineWidth));
@@ -2281,6 +2286,21 @@ bool GLEPropertyHei::isEqualToState(GLEPropertyStore* store) {
 
 void GLEPropertyHei::updateState(GLEPropertyStore* store) {
 	g_set_hei(store->getRealProperty(this));
+}
+
+GLEPropertyTeXFontSize::GLEPropertyTeXFontSize(const char* name) : GLEProperty(name, "fontsize", GLEPropertyTypeInt, GLEDOPropertyTeXFontSize) {
+}
+
+GLEPropertyTeXFontSize::~GLEPropertyTeXFontSize() {
+}
+
+bool GLEPropertyTeXFontSize::isEqualToState(GLEPropertyStore* store) {
+	int fontsize = g_get_texfontsize();
+	return (fontsize == store->getIntProperty(this));
+}
+
+void GLEPropertyTeXFontSize::updateState(GLEPropertyStore* store) {
+	g_set_texfontsize(store->getIntProperty(this));
 }
 
 GLEPropertyFont::GLEPropertyFont(const char* name) : GLEProperty(name, "font", GLEPropertyTypeFont, GLEDOPropertyFont) {

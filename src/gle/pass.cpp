@@ -1910,6 +1910,9 @@ void GLEParser::passt(GLESourceLine &SLine, GLEPcode& pcode) {
 				  case 1: /* height */
 					get_exp(pcode);
 					break;
+				  case OP_SET_TEXFONTSIZE: /* fontsize (TeX) */
+					get_exp(pcode);
+					break;
 				  case 2: /* font */
 					get_font(pcode);
 					break;

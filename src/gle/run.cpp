@@ -1441,6 +1441,10 @@ void GLERun::do_pcode(GLESourceLine &sline, int *srclin, int *pcode, int plen, i
 					readval(x);
 					g_set_hei(x);
 					break;
+				  case OP_SET_TEXFONTSIZE: /* font size (TeX) */
+					readval(x);
+					g_set_texfontsize(x);
+					break;
 				  case 2: /* font */
 					readval(x);
 					memcpy(&both.l,&x,4);

@@ -96,6 +96,7 @@ public:
 	double shift;
 	int label_font;
 	double label_hei;
+	int label_fsize;
 	double label_scale;
 	double label_dist;
 	int label_align;
@@ -118,6 +119,7 @@ public:
 	int title_font;
 	double title_dist, title_adist;
 	double title_hei, title_scale;
+	int title_fsize;
 	int title_rot,title_off;
 	GLERC<GLEColor> title_color;	/* 0=normal, 1=rotate 180 */
 	GLERC<GLEColor> ticks_color;

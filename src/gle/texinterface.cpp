@@ -144,15 +144,21 @@ TeXObject* TeXInterface::draw(const char* str, TeXObjectInfo& info, int nblines,
 
 void TeXInterface::scaleObject(string& obj_str, double hei) {
 	int scaleMode = getScaleMode();
+	TeXPreambleInfo* preamble = getCurrentPreamble();
 	if (scaleMode != TEX_SCALE_MODE_NONE) {
-		TeXPreambleInfo* preamble = getCurrentPreamble();
 		if (!preamble->hasFontSizes()) checkTeXFontSizes();
 		if (hei == 0) g_get_hei(&hei);
 		if (scaleMode == TEX_SCALE_MODE_FIXED) {
-			int best_size = preamble->getBestSizeFixed(hei);
-			if (best_size != -1) {
-				string prefix = "{\\" + getFontSize(best_size)->getName() + " ";
+			if (g_get_texfontsize()>0){
+				int size = preamble->getBestSizeTexFontSize(g_get_texfontsize());
+				string prefix = "{\\" + getFontSize(size)->getName() + " ";
 				obj_str = prefix + obj_str + "}";
+			} else{
+				int best_size = preamble->getBestSizeFixed(hei);
+				if (best_size != -1) {
+					string prefix = "{\\" + getFontSize(best_size)->getName() + " ";
+					obj_str = prefix + obj_str + "}";
+				}
 			}
 		} else {
 			int best_size = preamble->getBestSizeScaled(hei);
@@ -708,6 +714,13 @@ int TeXPreambleInfo::getBestSizeScaled(double hei) {
 		}
 	}
 	return getNbFonts()-1;
+}
+
+int TeXPreambleInfo::getBestSizeTexFontSize(int fontsize) {
+	// tiny = 1, ..., normalsize = 5, ..., Huge = 10
+	if (fontsize < 1) fontsize = 1; // should never happen (this function is called when fontsize > 0)
+	else if (fontsize > getNbFonts()) fontsize = getNbFonts();
+	return fontsize - 1;
 }
 
 TeXPreambleInfoList::TeXPreambleInfoList() {

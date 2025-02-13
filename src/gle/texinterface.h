@@ -163,6 +163,7 @@ public:
 	void load(std::istream& is, TeXInterface* iface);
 	int getBestSizeScaled(double hei);
 	int getBestSizeFixed(double hei);
+	int getBestSizeTexFontSize(int fontsize);
 	inline int getNbFonts() { return m_FontSizes.size(); }
 	inline bool hasFontSizes() { return m_HasFontSizes; }
 	inline void setHasFontSizes(bool hasf) { m_HasFontSizes = hasf; }

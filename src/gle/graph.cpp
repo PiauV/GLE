@@ -761,6 +761,7 @@ void do_key(int& ct) {
 		else kw("NOLINE") g_keyInfo->setNoLines(true);
 		else kw("COMPACT") g_keyInfo->setCompact(true);
 		else kw("HEI") g_keyInfo->setHei(next_exp);
+		else kw("FONTSIZE") g_keyInfo->setFontSize(next_exp);
 		else kw("POSITION") next_str(g_keyInfo->getJustify());
 		else kw("POS") next_str(g_keyInfo->getJustify());
 		else kw("JUSTIFY") {
@@ -905,11 +906,12 @@ void do_main_title(int& ct) {
 	xx[t].title_dist = g_fontsz*.7;
 	xx[t].title_hei = g_fontsz*g_get_fconst(GLEC_TITLESCALE);
 	while (ct<=ntk)  {
-	         kw("HEI")     xx[t].title_hei = next_exp;
-	    else kw("OFF")     xx[t].title_off = true;
-	    else kw("COLOR")   xx[t].title_color = next_color;
-	    else kw("FONT")    xx[t].title_font = next_font;
-	    else kw("DIST")    xx[t].title_dist = next_exp;
+	         kw("HEI")      xx[t].title_hei = next_exp;
+	    else kw("FONTSIZE") xx[t].title_fsize = next_exp;
+	    else kw("OFF")      xx[t].title_off = true;
+	    else kw("COLOR")    xx[t].title_color = next_color;
+	    else kw("FONT")     xx[t].title_font = next_font;
+	    else kw("DIST")     xx[t].title_dist = next_exp;
 	    else g_throw_parser_error("expecting title sub command, not '", tk[ct], "'");
 	    ct++;
 	}
@@ -921,14 +923,15 @@ void do_title(int& ct) {
 	next_vquote_cpp(xx[t].title);
 	ct = 3;
 	while (ct<=ntk)  {
-	         kw("HEI")     xx[t].title_hei = next_exp;
-	    else kw("OFF")     xx[t].title_off = true;
-	    else kw("ROT")     xx[t].title_rot = true;
-	    else kw("ROTATE")  xx[t].title_rot = true;
-	    else kw("COLOR")   xx[t].title_color = next_color;
-	    else kw("FONT")    xx[t].title_font = next_font;
-	    else kw("DIST")    xx[t].title_dist = next_exp;
-	    else kw("ADIST")   xx[t].title_adist = next_exp;
+	         kw("HEI")      xx[t].title_hei = next_exp;
+	    else kw("FONTSIZE") xx[t].title_fsize = next_exp;
+	    else kw("OFF")      xx[t].title_off = true;
+	    else kw("ROT")      xx[t].title_rot = true;
+	    else kw("ROTATE")   xx[t].title_rot = true;
+	    else kw("COLOR")    xx[t].title_color = next_color;
+	    else kw("FONT")     xx[t].title_font = next_font;
+	    else kw("DIST")     xx[t].title_dist = next_exp;
+	    else kw("ADIST")    xx[t].title_adist = next_exp;
 	    else kw("ALIGN") {
 		string base;
 		next_str_cpp(base);
@@ -1052,6 +1055,7 @@ void do_axis(int axis, bool craxis) {
 		}
 		else kw("ROUNDRANGE") xx[axis].roundRange = get_on_off(tk, &ct);
 		else kw("HEI") 	xx[axis].label_hei = next_exp;
+		else kw("FONTSIZE") xx[axis].label_fsize = next_exp;
 		else kw("NOLAST") xx[axis].nolast = true;
 		else kw("LAST") xx[axis].nolast = !get_on_off(tk, &ct);
 		else kw("FIRST") xx[axis].nofirst = !get_on_off(tk, &ct);
@@ -1528,7 +1532,10 @@ void GLEGraphPartAxis::setBox(GLERectangle* box) {
 }
 
 void prepare_graph_key_and_clip(double ox, double oy, KeyInfo* keyinfo) {
-	if (!keyinfo->hasHei()) keyinfo->setHei(g_fontsz);
+	if (!keyinfo->hasHei()) {
+		if (!keyinfo->hasFontSize()) keyinfo->setHei(g_fontsz);
+		else keyinfo->setHei(g_get_hei_from_texfontsize(keyinfo->getFontSize()));
+	}
 	measure_key(keyinfo);
 	if (keyinfo->getNbEntries() > 0 && !keyinfo->isDisabled() && !keyinfo->getNoBox() && keyinfo->getBackgroundColor()->isTransparent()) {
 		g_gsave();
@@ -1545,7 +1552,10 @@ void prepare_graph_key_and_clip(double ox, double oy, KeyInfo* keyinfo) {
 }
 
 void key_update_bounds(double ox, double oy, KeyInfo* keyinfo) {
-	if (!keyinfo->hasHei()) keyinfo->setHei(g_fontsz);
+	if (!keyinfo->hasHei()) {
+		if (!keyinfo->hasFontSize()) keyinfo->setHei(g_fontsz);
+		else keyinfo->setHei(g_get_hei_from_texfontsize(keyinfo->getFontSize()));
+	}
 	measure_key(keyinfo);
 	if (keyinfo->getNbEntries() > 0 && !keyinfo->isDisabled()) {
 		g_update_bounds(keyinfo->getRect());

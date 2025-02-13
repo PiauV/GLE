@@ -522,7 +522,7 @@ enum GLEPropertyType {
 enum GLEPropertyID {
 	GLEDOPropertyColor, GLEDOPropertyFillColor, GLEDOPropertyJustify,
 	GLEDOPropertyLineWidth, GLEDOPropertyLineStyle, GLEDOPropertyLineCap,
-	GLEDOPropertyFont, GLEDOPropertyFontSize, GLEDOPropertyArrowSize,
+	GLEDOPropertyFont, GLEDOPropertyFontSize, GLEDOPropertyTeXFontSize, GLEDOPropertyArrowSize,
 	GLEDOPropertyArrowAngle, GLEDOPropertyArrowStyle, GLEDOPropertyArrowTip,
 	GLEDOPropertyUserArg
 };
@@ -610,6 +610,14 @@ class GLEPropertyHei : public GLEProperty {
 public:
 	GLEPropertyHei(const char* name);
 	virtual ~GLEPropertyHei();
+	virtual bool isEqualToState(GLEPropertyStore* store);
+	virtual void updateState(GLEPropertyStore* store);
+};
+
+class GLEPropertyTeXFontSize : public GLEProperty {
+public:
+	GLEPropertyTeXFontSize(const char* name);
+	virtual ~GLEPropertyTeXFontSize();
 	virtual bool isEqualToState(GLEPropertyStore* store);
 	virtual void updateState(GLEPropertyStore* store);
 };
