@@ -183,6 +183,10 @@ void GLEKeyBlockInstance::executeLine(GLESourceLine& sline)	{
 		else kw("NOBOX") m_info.setNoBox(true);
 		else kw("NOLINE") m_info.setNoLines(true);
 		else kw("COMPACT") m_info.setCompact(true);
+		else kw("FILLCOMPACT") {
+			m_info.setFillCompact(true);
+			m_info.setCompact(true); // 'fillcompact' implies 'compact'
+		}
 		else kw("OFF") m_info.setDisabled(true);
 		else kw("HEI") m_info.setHei(next_exp);
 		else kw("POSITION") next_str(m_info.getJustify());
@@ -269,7 +273,8 @@ GLEKeyBlockBase::GLEKeyBlockBase():
 		"OFF", "HEI", "POSITION", "POS", "BOXCOLOR", "SEPARATOR",
 		"LSTYLE", "JUSTIFY", "JUST", "DIST", "COLDIST", "TEXT",
 		"MARKER", "MSIZE", "MSCALE", "COLOR", "MCOLOR", "TEXTCOLOR",
-		"FILL", "PATTERN", "LINE", "LWIDTH", ""};
+		"FILL", "FILLCOMPACT", "PATTERN", "LINE", "LWIDTH", ""};
+
 	for (int i = 0; commands[i][0] != 0; ++i) {
 		addKeyWord(commands[i]);
 	}
@@ -327,6 +332,7 @@ KeyInfo::KeyInfo() {
 	m_HasOffset = false;
 	m_HasBoxColor = false;
 	m_Compact = false;
+	m_FillCompact = false;
 	m_NoLines = false;
 	m_Disabled = false;
 	m_BoxColor = 0;
@@ -434,7 +440,7 @@ void measure_key_v_recent(KeyInfo* info, GLEPoint* orig) {
 			entry_wd += info->getLineLen() + info->getDist();
 		}
 		if (prev_col->hasMarker()) entry_wd += info->getDist();
-		if (prev_col->hasFill()) entry_wd += KEY_FILL_HEI_FX*rowhi + info->getDist();
+		if (prev_col->hasFill() && !info->isFillCompact()) entry_wd += KEY_FILL_HEI_FX*rowhi + info->getDist();
 		info->getCol(i)->offs = prev_col->offs + prev_col->size + entry_wd + info->getColDist() +
 		                        prev_col->mleft + prev_col->mright;
 	}
@@ -687,7 +693,7 @@ void measure_key(KeyInfo* info) {
 			}
 			if (info->getCol(col)->mleft < -marksize.getXMin()) info->getCol(col)->mleft = -marksize.getXMin();
 			if (info->getCol(col)->mright < marksize.getXMax()) info->getCol(col)->mright = marksize.getXMax();
-		} else if (info->isCompact() && colinfo->hasLine() && !info->isNoLines()) {
+		} else if ((info->isCompact() && colinfo->hasLine() && !info->isNoLines()) || (info->isFillCompact() && colinfo->hasFill())) {
 			// compact mode, but no marker in this column!
 			double llen = info->getLineLen();
 			if (info->getCol(col)->mleft < llen/2) info->getCol(col)->mleft = llen/2;
@@ -781,6 +787,24 @@ void do_draw_key(double ox, double oy, bool notxt, KeyInfo* info) {
 		if (!entry->color.isNull()) {
 			g_set_color(entry->color);
 		}
+		if (info->isFillCompact() && entry->hasFill()) {
+			double dx = col_info->mleft-info->getLineLen()/2.;
+			g_rmove(dx, 0);
+			g_set_fill(entry->fill);
+			g_get_xy(&cx,&cy);
+			g_box_fill(cx,cy,cx+info->getLineLen(), cy+rowhi*KEY_FILL_HEI_FY);
+			if (info->hasBoxColor()) {
+				// do not draw box unless a box color was explicity set
+				GLERC<GLEColor> save_color(g_get_color());
+				GLERC<GLEColor> boxcolor = info->getBoxColor();
+				if (!boxcolor->isTransparent()) {
+					g_set_color(boxcolor);
+					g_box_stroke(cx,cy,cx+info->getLineLen(), cy+rowhi*KEY_FILL_HEI_FY);
+					g_set_color(save_color);
+				}
+			}
+			g_rmove(-dx, 0);
+		}
 		if (col_info->hasMarker()) {
 			g_rmove(col_info->mleft, info->getLinePos());
 			g_get_line_width(&savelw);
@@ -822,7 +846,7 @@ void do_draw_key(double ox, double oy, bool notxt, KeyInfo* info) {
 		if (!entry->color.isNull()) {
 			g_set_color(info->getDefaultColor());
 		}
-		if (col_info->hasFill()) {
+		if (col_info->hasFill() && !info->isFillCompact()) {
 			if (entry->hasFill()) {
 				g_set_fill(entry->fill);
 				g_get_xy(&cx,&cy);

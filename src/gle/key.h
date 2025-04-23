@@ -99,7 +99,7 @@ protected:
 	double m_MarginX, m_MarginY, m_TotHei, m_ColDist, m_Dist;
 	double m_OffsX, m_OffsY;
 	bool m_PosOrJust, m_Absolute, m_HasOffset, m_HasBoxColor, m_NoBox, m_Fill;
-	bool m_Compact, m_NoLines, m_Disabled;
+	bool m_Compact, m_FillCompact, m_NoLines, m_Disabled;
 	char m_Justify[34];
 	GLEPoint m_ComputedMargins;
 	GLERectangle m_Rect;
@@ -166,8 +166,10 @@ public:
 	inline GLERC<GLEColor> getBoxColor() { return m_BoxColor; }
 	inline bool hasBoxColor() { return m_HasBoxColor; }
 	inline bool isCompact() { return m_Compact; }
+	inline bool isFillCompact() { return m_FillCompact; }
 	inline bool isNoLines() { return m_NoLines; }
 	inline void setCompact(bool val) { m_Compact = val; }
+	inline void setFillCompact(bool val) { m_FillCompact = val; }
 	inline void setNoLines(bool val) { m_NoLines = val; }
 	inline GLERectangle* getRect() { return &m_Rect; }
 	inline GLEPoint* getComputedMargins() { return &m_ComputedMargins; }

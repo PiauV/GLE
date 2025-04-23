@@ -760,6 +760,10 @@ void do_key(int& ct) {
 		else kw("NOBOX") g_keyInfo->setNoBox(true);
 		else kw("NOLINE") g_keyInfo->setNoLines(true);
 		else kw("COMPACT") g_keyInfo->setCompact(true);
+		else kw("FILLCOMPACT") {
+			g_keyInfo->setFillCompact(true);
+			g_keyInfo->setCompact(true); // 'fillcompact' implies 'compact'
+		}
 		else kw("HEI") g_keyInfo->setHei(next_exp);
 		else kw("POSITION") next_str(g_keyInfo->getJustify());
 		else kw("POS") next_str(g_keyInfo->getJustify());
