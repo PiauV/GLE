@@ -1960,9 +1960,11 @@ void GLEParser::passt(GLESourceLine &SLine, GLEPcode& pcode) {
 				  case OP_SET_TITLE_SCALE:
 				  case OP_SET_ATITLE_SCALE:
 				  case OP_SET_ALABEL_SCALE:
+				  case OP_SET_KTITLE_SCALE:
 				  case OP_SET_TICKS_SCALE:
 				  case OP_SET_ATITLE_DIST:
 				  case OP_SET_ALABEL_DIST:
+				  case OP_SET_KTITLE_DIST:
 				  	get_exp(pcode);
 					break;
 				  }

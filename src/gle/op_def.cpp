@@ -197,9 +197,11 @@ struct op_key op_set[] = {
 		{ "TITLESCALE",  typ_switch,    1, OP_SET_TITLE_SCALE },
 		{ "ATITLESCALE", typ_switch,    1, OP_SET_ATITLE_SCALE },
 		{ "ALABELSCALE", typ_switch,    1, OP_SET_ALABEL_SCALE },
+		{ "KTITLESCALE", typ_switch,    1, OP_SET_KTITLE_SCALE },
 		{ "TICKSSCALE",  typ_switch,    1, OP_SET_TICKS_SCALE },
 		{ "ATITLEDIST",  typ_switch,    1, OP_SET_ATITLE_DIST },
 		{ "ALABELDIST",  typ_switch,    1, OP_SET_ALABEL_DIST },
+		{ "KTITLEDIST",  typ_switch,    1, OP_SET_KTITLE_DIST },
 		{ "END",         typ_end,       1, 1} };
 
 /* colors, fills,  First byte is pattern, then red,green,blue intensities*/

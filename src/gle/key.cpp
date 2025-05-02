@@ -71,6 +71,8 @@ extern int gle_debug;
 void doskip(char *s,int *ct);
 double get_next_exp(TOKENS tk,int ntk,int *curtok);
 
+void do_key_title(int& ct, KeyInfo* info);
+
 #define kw(ss) if (str_i_equals(tk[ct],ss))
 #define true (!false)
 #define false 0
@@ -212,6 +214,9 @@ void GLEKeyBlockInstance::executeLine(GLESourceLine& sline)	{
 		}
 		else kw("DIST") m_info.setDist(next_exp);
 		else kw("COLDIST") m_info.setColDist(next_exp);
+		else kw("TITLE") {
+			do_key_title(ct, &m_info);
+		}
 		else {
 			if (ct == 1) {
 				entry = m_info.createEntry();
@@ -269,7 +274,7 @@ GLEKeyBlockBase::GLEKeyBlockBase():
 		"OFF", "HEI", "POSITION", "POS", "BOXCOLOR", "SEPARATOR",
 		"LSTYLE", "JUSTIFY", "JUST", "DIST", "COLDIST", "TEXT",
 		"MARKER", "MSIZE", "MSCALE", "COLOR", "TEXTCOLOR", "FILL",
-		"PATTERN", "LINE", "LWIDTH", ""};
+		"PATTERN", "LINE", "LWIDTH", "TITLE", ""};
 	for (int i = 0; commands[i][0] != 0; ++i) {
 		addKeyWord(commands[i]);
 	}
@@ -335,6 +340,9 @@ KeyInfo::KeyInfo() {
 	m_col = 0;
 	m_FontSize = 0;
 	strcpy(m_Justify, "");
+	m_Title = "";
+	m_TitleHei = 0.0;
+	m_TitleDist = 0.0;
 }
 
 KeyInfo::~KeyInfo() {
@@ -698,6 +706,31 @@ void measure_key(KeyInfo* info) {
 		}
 		info->getCol(col)->elems++;
 	}
+	/* Measure the title */
+	if (info->hasTitle()){
+		if (!str_only_space(info->getTitle())) {
+			g_gsave();
+			// set title hei and title dist
+			double h, d;
+			h = info->getTitleHei();
+			d = info->getTitleDist();
+			if (!h){
+				if (!info->hasHei()) g_get_hei(&h);
+				else h = info->getHei();
+				h *= g_get_fconst(GLEC_KTITLESCALE);
+				info->setTitleHei(h);
+			}
+			if (!d){
+				d = h*g_get_fconst(GLEC_KTITLEDIST);
+			}
+			g_set_hei(h);
+			// measure title height
+			double bl, br, bu, bd;
+			g_measure(info->getTitle(),&bl,&br,&bu,&bd);
+			info->setTitleDist(bu+d);
+			g_grestore();
+		}
+	}
 	/* Set linePos based to half of the fill block */
 	if (info->hasFill()) {
 		linePos = rowhi*KEY_FILL_HEI_FY/2;
@@ -763,6 +796,19 @@ void draw_key_after_measure(KeyInfo* info) {
 void do_draw_key(double ox, double oy, bool notxt, KeyInfo* info) {
 	double savelw;
 	double cx, cy;
+	/* Draw title */
+	if (info->hasTitle()) {
+		g_gsave();
+		g_set_hei(info->getTitleHei());
+		if (!info->getTitleColor().isNull()) g_set_color(info->getTitleColor());
+		g_set_just(JUST_LEFT);
+		cx = ox+info->getCol(0)->offs;
+		cy = oy+info->getRow(0)->offs;
+		g_move(cx, cy);
+		g_update_bounds(cx, cy);
+		g_text(info->getTitle());
+		g_grestore();
+	}
 	/* Draw all labels */
 	int row = 0;
 	int prev_col = 0;
@@ -779,6 +825,7 @@ void do_draw_key(double ox, double oy, bool notxt, KeyInfo* info) {
 		KeyRCInfo* col_info = info->getCol(prev_col);
 		cx = ox+col_info->offs;
 		cy = oy+info->getRow(row)->offs;
+		if (info->hasTitle()) cy -= info->getTitleDist();
 		g_move(cx, cy);
 		g_update_bounds(cx, cy);
 		if (!entry->color.isNull()) {
@@ -850,6 +897,20 @@ void do_draw_key(double ox, double oy, bool notxt, KeyInfo* info) {
 			g_update_bounds(cx+col_info->size, cy+info->getRow(row)->size);
 		}
 		row++;
+	}
+}
+
+void do_key_title(int& ct, KeyInfo* info) {
+	std::string key_title;
+	next_vquote_cpp(key_title);
+	info->setTitle(key_title);
+	++ct;
+	while (ct<=ntk)  {
+	         kw("HEI")      info->setTitleHei(next_exp);
+	    else kw("COLOR")    info->setTitleColor(next_color);
+	    else kw("DIST")     info->setTitleDist(next_exp);
+	    else g_throw_parser_error("expecting key title sub command, not '", tk[ct], "'");
+	    ct++;
 	}
 }
 

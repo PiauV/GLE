@@ -61,22 +61,27 @@ struct op_key {
 #define OP_SET_ARROW_STYLE   13
 #define OP_SET_ARROW_TIP     14
 #define OP_SET_IMAGE_FORMAT  15
-#define OP_SET_TITLE_SCALE   16
-#define OP_SET_ATITLE_SCALE  17
-#define OP_SET_ALABEL_SCALE  18
-#define OP_SET_TICKS_SCALE   19
-#define OP_SET_ATITLE_DIST   20
-#define OP_SET_ALABEL_DIST   21
-#define OP_SET_TEX_SCALE     22
-#define OP_SET_TEX_LABELS    23
-#define OP_SET_FILL          24
-#define OP_SET_FILL_PATTERN  25
-#define OP_SET_BACKGROUND    26
-#define OP_SET_FILL_METHOD   27
-#define OP_SET_TEXFONTSIZE   28
 
-#define OP_BEGIN_OBJECT      30
-#define OP_BEGIN_LENGTH      31
+// GLEC_<var> (from core.h) + 20
+#define OP_SET_TITLE_SCALE   20
+#define OP_SET_ATITLE_SCALE  21
+#define OP_SET_ALABEL_SCALE  22
+#define OP_SET_KTITLE_SCALE  23
+#define OP_SET_TICKS_SCALE   24
+#define OP_SET_ATITLE_DIST   25
+#define OP_SET_ALABEL_DIST   26
+#define OP_SET_KTITLE_DIST   27
+
+#define OP_SET_TEX_SCALE     30
+#define OP_SET_TEX_LABELS    31
+#define OP_SET_FILL          32
+#define OP_SET_FILL_PATTERN  33
+#define OP_SET_BACKGROUND    34
+#define OP_SET_FILL_METHOD   35
+#define OP_SET_TEXFONTSIZE   36
+
+#define OP_BEGIN_OBJECT      40
+#define OP_BEGIN_LENGTH      41
 
 extern struct op_key op_box[];
 extern struct op_key op_circle[];

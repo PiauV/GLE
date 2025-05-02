@@ -1288,6 +1288,7 @@ void g_clear() {
 	/* set other constants */
 	g_set_fconst(GLEC_ATITLEDIST, 0.5);
 	g_set_fconst(GLEC_ALABELDIST, 0.5);
+	g_set_fconst(GLEC_KTITLEDIST, 0.5);
 	g_compatibility_settings();
 	g_get_core()->reset();
 }
@@ -1303,6 +1304,7 @@ void g_compatibility_settings() {
 		// Make sure GLEC_ATITLESCALE = 1
 		g_set_fconst(GLEC_TITLESCALE, 1.16);
 		g_set_fconst(GLEC_ATITLESCALE, 1.0);
+		g_set_fconst(GLEC_KTITLESCALE, 1.0);
 		g_set_fconst(GLEC_ALABELSCALE, 0.8);
 		g_set_fconst(GLEC_TICKSSCALE, 0.3);
 	}
@@ -1342,20 +1344,10 @@ void g_restore_defaults() {
 	g.arrowangle = 0.0;
 	g.arrowstyle = GLE_ARRSTY_FILLED;
 	g.arrowtip = GLE_ARRTIP_SHARP;
-	if (g_get_compatibility() <= GLE_COMPAT_35) {
-		g_set_fconst(GLEC_TITLESCALE, 1.5);
-		g_set_fconst(GLEC_ATITLESCALE, 1.3);
-		g_set_fconst(GLEC_ALABELSCALE, 1.0);
-		g_set_fconst(GLEC_TICKSSCALE, 0.2);
-		g.arrowstyle = GLE_ARRSTY_OLD35;
-	} else {
-		g_set_fconst(GLEC_TITLESCALE, 1.16);
-		g_set_fconst(GLEC_ATITLESCALE, 1.0);
-		g_set_fconst(GLEC_ALABELSCALE, 0.8);
-		g_set_fconst(GLEC_TICKSSCALE, 0.3);
-	}
+	g_compatibility_settings();
 	g_set_fconst(GLEC_ATITLEDIST, 0.5);
 	g_set_fconst(GLEC_ALABELDIST, 0.5);
+	g_set_fconst(GLEC_KTITLEDIST, 0.5);
 	g_set_just(JUST_LEFT);
 	g_set_line_styled(0.04);
 	g_set_line_style("1");

@@ -62,13 +62,15 @@
 #define GLEC_MAX_INT       1
 #define GLEC_COMPATIBILITY 0
 
-#define GLEC_MAX_DOUBLE    6
+#define GLEC_MAX_DOUBLE    8
 #define GLEC_TITLESCALE    0
 #define GLEC_ATITLESCALE   1
 #define GLEC_ALABELSCALE   2
-#define GLEC_TICKSSCALE    3
-#define GLEC_ATITLEDIST    4
-#define GLEC_ALABELDIST    5
+#define GLEC_KTITLESCALE   3
+#define GLEC_TICKSSCALE    4
+#define GLEC_ATITLEDIST    5
+#define GLEC_ALABELDIST    6
+#define GLEC_KTITLEDIST    7
 
 #define GLE_ARRSTY_SIMPLE 0
 #define GLE_ARRSTY_FILLED 1

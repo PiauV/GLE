@@ -104,6 +104,10 @@ protected:
 	GLERectangle m_Rect;
 	int m_col;
 	int m_FontSize;
+	std::string m_Title;
+	double m_TitleHei;
+	GLERC<GLEColor> m_TitleColor;
+	double m_TitleDist;
 
 public:
 	KeyInfo();
@@ -180,6 +184,15 @@ public:
 	inline void setDisabled(bool dis) { m_Disabled = dis; }
 	inline bool isDisabled() { return m_Disabled; }
 	inline KeyEntry* getEntry(int i) { return m_entries[i]; }
+	inline bool hasTitle() { return m_Title.size() > 0; }
+	inline std::string getTitle() { return m_Title; }
+	inline void setTitle(const std::string& str) { m_Title = str; }
+	inline double getTitleHei() { return m_TitleHei; }
+	inline void setTitleHei(double hei) { m_TitleHei = hei; }
+	inline double getTitleDist() { return m_TitleDist; }
+	inline void setTitleDist(double dist) { m_TitleDist = dist; }
+	inline GLERC<GLEColor> getTitleColor() { return m_TitleColor; }
+	inline void setTitleColor(const GLERC<GLEColor>& col) { m_TitleColor = col; }
 };
 
 void draw_key(KeyInfo* info);
