@@ -418,6 +418,7 @@ void g_line(double zx,double zy);
 void g_line_ary(int nwk,double *wkx,double *wky);
 void g_marker_def(char *name, char *subname);
 // void g_measure(const char *s, dbl *l, dbl *r, dbl *u, dbl *d);
+void g_measure(const std::string& s, double max_width, dbl *l, dbl *r, dbl *u, dbl *d);
 void g_measure(const std::string& s, dbl *l, dbl *r, dbl *u, dbl *d);
 void g_message(const char *s);
 bool g_reset_message();

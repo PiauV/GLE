@@ -748,7 +748,12 @@ void draw_axis_titles(GLEAxis *ax, double h, double ox, double oy, GLEMeasureBox
 	if (tdist == 0) tdist = h * g_get_fconst(GLEC_ATITLEDIST);
 	string title_str(ax->title);
 	add_tex_labels(&title_str);
-	g_measure(title_str,&bl,&br,&bu,&bd);
+	if (ax->title_wrap > 0.01) {
+		g_measure(title_str,ax->title_wrap*ax->length,&bl,&br,&bu,&bd);
+	}
+	else {
+		g_measure(title_str,&bl,&br,&bu,&bd);
+	}
 	switch (ax->type) {
 		case GLE_AXIS_X:
 		case GLE_AXIS_X0:
@@ -764,6 +769,7 @@ void draw_axis_titles(GLEAxis *ax, double h, double ox, double oy, GLEMeasureBox
 			break;
 		case GLE_AXIS_X2:
 		case GLE_AXIS_T:
+			if (ax->title_wrap > 0.01) tdist -= round(bd/th)*th; // this is a small trick to preserve alignement... maybe there is a better way
 			g_move(ox+ax->length/2, measure->getYMax() + tdist);
 			// *should* be center - otherwise titles of different graphs don't align!
 			if (ax->isAlignBase()) g_jtext(JUST_CENTER);
@@ -1192,7 +1198,7 @@ void GLEAxis::init(int i) {
 	side_off = 0; ticks_off = 0; subticks_off = 0;
 	side_lstyle[0] = 0;
 	title_font = 0; title_dist = 0.0; title_adist = -1.0; title_hei = 0.0; title_scale = 0.0; title_fsize = 0;
-	title_rot = 0; title_off = 0; title_color = 0;
+	title_rot = 0; title_off = 0; title_color = 0; title_wrap = 0.0;
 	negate = 0;
 	names_ds = -1;
 	label_angle = 0.0;

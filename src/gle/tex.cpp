@@ -1699,13 +1699,13 @@ void tex_term() {
 	}
 }
 
-void g_measure(const string& s, double *l, double *r, double *u, double *d) {
+void g_measure(const string& s, double max_width, double *l, double *r, double *u, double *d) {
 	double sa,sb,sc,sd;
 	g_get_bounds(&sa,&sb,&sc,&sd);
 	set_base_size();
 	g_init_bounds();
 	dont_print = true;
-	fftext_block(s,0.0,0);
+	fftext_block(s,max_width,0);
 	dont_print = false;
 	g_get_bounds(l,d,r,u);
 	if (*l > *r) {*l=0; *r=0; *u=0; *d=0;}
@@ -1717,6 +1717,10 @@ void g_measure(const string& s, double *l, double *r, double *u, double *d) {
 	if (sa>sc) return;
 	g_update_bounds(sa,sb);
 	g_update_bounds(sc,sd);
+}
+
+void g_measure(const string& s, double *l, double *r, double *u, double *d) {
+	g_measure(s, 0.0, l, r, u, d);
 }
 
 void g_textfindend(const string& s, double *cx, double *cy) {

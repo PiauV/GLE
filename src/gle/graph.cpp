@@ -912,6 +912,7 @@ void do_main_title(int& ct) {
 	    else kw("COLOR")    xx[t].title_color = next_color;
 	    else kw("FONT")     xx[t].title_font = next_font;
 	    else kw("DIST")     xx[t].title_dist = next_exp;
+	    else kw("WRAP")     xx[t].title_wrap = next_exp;
 	    else g_throw_parser_error("expecting title sub command, not '", tk[ct], "'");
 	    ct++;
 	}
@@ -932,6 +933,7 @@ void do_title(int& ct) {
 	    else kw("FONT")     xx[t].title_font = next_font;
 	    else kw("DIST")     xx[t].title_dist = next_exp;
 	    else kw("ADIST")    xx[t].title_adist = next_exp;
+	    else kw("WRAP")     xx[t].title_wrap = next_exp;
 	    else kw("ALIGN") {
 		string base;
 		next_str_cpp(base);
