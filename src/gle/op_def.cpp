@@ -168,6 +168,7 @@ struct op_key op_begin[] = {
 
 struct op_key op_set[] = {
 		{ "HEI",         typ_switch, 	1, 1 },
+		{ "FONTSIZE",    typ_switch, 	1, OP_SET_TEXFONTSIZE },
 		{ "FONT",        typ_switch, 	1, 2 },
 		{ "JUSTIFY",     typ_switch, 	1, 3 },
 		{ "JUST",        typ_switch, 	1, 3 },

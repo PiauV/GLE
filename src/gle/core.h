@@ -92,7 +92,8 @@ public:
 
 struct gmodel {
 	double image[3][3];
-	double fontn,fontsz;	/* up to here for font caching */
+	double fontn,fontsz;
+	int texfontsz;		/* up to here for font caching */
 	GLERC<GLEColor> color;
 	GLERC<GLEColor> fill;
 	double lwidth,lstyled,curx,cury;
@@ -217,11 +218,14 @@ void g_get_font(int *f);
 //void g_close(void);
 void g_defmarker(const char *mname, const char *font, int ccc, double dx, double dy, double sz, int autodx);
 void g_get_hei(double *h);
+int g_get_texfontsize();
+double g_get_hei_from_texfontsize(int tfs);
 //void g_gsave(void);
 void g_hint(char *s);
 void g_marker(int i, double sz);
 void g_marker2(int i, double sz, double dval);
 void g_set_hei(double h);
+void g_set_texfontsize(int tfs);
 bool gclip(double *x1,double *y1, double *x2, double *y2,double xmin, double ymin, double xmax, double ymax);
 void g_pscomment(char* ss);
 void g_psbbtweak(void);

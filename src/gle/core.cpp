@@ -1235,7 +1235,8 @@ void g_clear() {
 	// cout << "calling g_clear()" << endl;
 	ngsave = 0;
 	g.fontn = 0.0;
-	g.fontsz = 0.0;		   /* up to here for font caching */
+	g.fontsz = 0.0;
+	g.texfontsz = 0;		   /* up to here for font caching */
 	g.color = color_or_fill_from_int(GLE_COLOR_BLACK);
 	g.fill = g_get_fill_clear();
 	g.lwidth = 0.0;
@@ -2011,6 +2012,10 @@ void g_set_hei(double h) {
 	g.fontsz = h;
 }
 
+void g_set_texfontsize(int tfs) {
+	g.texfontsz = tfs;
+}
+
 void g_get_just(int *jj) {
 	*jj = g.just;
 }
@@ -2021,6 +2026,26 @@ void g_get_font(int *jj) {
 
 void g_get_hei(double *h) {
 	*h = g.fontsz;
+}
+
+int g_get_texfontsize(){
+	return g.texfontsz;
+}
+
+double g_get_hei_from_texfontsize(int tfs){
+	switch (tfs){
+		case 1  : return 0.1816;
+		case 2  : return 0.2543;
+		case 3  : return 0.2906;
+		case 4  : return 0.3270;
+		case 5  : return 0.3633;
+		case 6  : return 0.4360;
+		case 7  : return 0.5086;
+		case 8  : return 0.6176;
+		case 9  : return 0.7266;
+		case 10 : return 0.9082;
+		default : return 0.3633;
+	}
 }
 
 bool g_parse_ps_boundingbox(const string& line, int* bx1, int* by1, int* bx2, int* by2)

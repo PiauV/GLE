@@ -103,6 +103,7 @@ protected:
 	GLEPoint m_ComputedMargins;
 	GLERectangle m_Rect;
 	int m_col;
+	int m_FontSize;
 
 public:
 	KeyInfo();
@@ -139,6 +140,9 @@ public:
 	inline double getHei() { return m_Hei; }
 	inline bool hasHei() { return m_Hei != 0.0; }
 	inline void setHei(double hei) { m_Hei = hei; }
+	inline double getFontSize() { return m_FontSize; }
+	inline void setFontSize(double fsize) { m_FontSize = fsize; }
+	inline bool hasFontSize() { return m_FontSize > 0; }
 	inline double getBase() { return m_Base; }
 	inline bool hasBase() { return m_Base != 0.0; }
 	inline void setBase(double base) { m_Base = base; }
