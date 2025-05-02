@@ -63,7 +63,9 @@ public:
 	KeyEntry(int col);
 	~KeyEntry();
 	bool hasFill() const;
+	KeyEntry& operator=(const KeyEntry& other);
 };
+
 
 class KeyRCInfo {
 public:
@@ -108,6 +110,7 @@ protected:
 	double m_TitleHei;
 	GLERC<GLEColor> m_TitleColor;
 	double m_TitleDist;
+	bool m_Waiting;
 
 public:
 	KeyInfo();
@@ -193,6 +196,9 @@ public:
 	inline void setTitleDist(double dist) { m_TitleDist = dist; }
 	inline GLERC<GLEColor> getTitleColor() { return m_TitleColor; }
 	inline void setTitleColor(const GLERC<GLEColor>& col) { m_TitleColor = col; }
+	inline void setWaiting(bool w) { m_Waiting = w; }
+	inline bool isWaiting() { return m_Waiting; }
+	inline bool isDrawable() { return (getNbEntries() > 0 && !m_Disabled && !m_Waiting); }
 };
 
 void draw_key(KeyInfo* info);

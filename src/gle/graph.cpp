@@ -784,6 +784,7 @@ void do_key(int& ct) {
 				keySeparator->getArray()->addInt((int)floor(next_exp + 0.5));
 			}
 		}
+		else kw("WAIT") g_keyInfo->setWaiting(true);
 		else g_throw_parser_error("unrecognised KEY sub command: '",tk[ct],"'");
 		ct++;
 	}
@@ -1539,7 +1540,7 @@ void prepare_graph_key_and_clip(double ox, double oy, KeyInfo* keyinfo) {
 		else keyinfo->setHei(g_get_hei_from_texfontsize(keyinfo->getFontSize()));
 	}
 	measure_key(keyinfo);
-	if (keyinfo->getNbEntries() > 0 && !keyinfo->isDisabled() && !keyinfo->getNoBox() && keyinfo->getBackgroundColor()->isTransparent()) {
+	if (keyinfo->isDrawable() && !keyinfo->getNoBox() && keyinfo->getBackgroundColor()->isTransparent()) {
 		g_gsave();
 		g_beginclip();
 		g_set_path(true);
@@ -1559,7 +1560,7 @@ void key_update_bounds(double ox, double oy, KeyInfo* keyinfo) {
 		else keyinfo->setHei(g_get_hei_from_texfontsize(keyinfo->getFontSize()));
 	}
 	measure_key(keyinfo);
-	if (keyinfo->getNbEntries() > 0 && !keyinfo->isDisabled()) {
+	if (keyinfo->isDrawable()) {
 		g_update_bounds(keyinfo->getRect());
 	}
 }
@@ -1694,7 +1695,7 @@ void draw_graph(KeyInfo* keyinfo, GLEGraphBlockInstance* graphBlock) {
 	graphBlock->drawParts();
 
 	/* Draw the key */
-	if (keyinfo->getNbEntries() > 0 && !keyinfo->isDisabled() && !keyinfo->getNoBox() && keyinfo->getBackgroundColor()->isTransparent()) {
+	if (keyinfo->isDrawable() && !keyinfo->getNoBox() && keyinfo->getBackgroundColor()->isTransparent()) {
 		g_endclip();
 		g_grestore();
 	}

@@ -58,6 +58,9 @@
 extern double graph_x1,graph_y1,graph_x2,graph_y2;  /* in cm */
 extern double graph_xmin,graph_ymin,graph_xmax,graph_ymax; /* graph units */
 
+// key from graph block
+extern KeyInfo* g_keyInfo;
+
 #define BEGINDEF extern
 #include "begin.h"
 #include <math.h>
@@ -156,12 +159,26 @@ void GLEKeyBlockInstance::executeLine(GLESourceLine& sline)	{
 		/* exit loop */
 		return;
 	}
+	if (!ntk) {
+		return;
+	}
 	/* line count variable*/
 	int ct = 1;
 	KeyEntry* entry = m_info.lastEntry();
 	while (ct <= ntk) {
 		skipspace;
-		kw("OFFSET") {
+		kw("RESTORE") {
+			if (g_keyInfo && g_keyInfo->isWaiting()){
+				g_keyInfo->setWaiting(false);
+				int nentries = g_keyInfo->getNbEntries();
+				for (int i=0; i<nentries; ++i) {
+					entry = m_info.createEntry();
+					*entry = *(g_keyInfo->getEntry(i)); // deep copy of key entries
+				}
+			}
+			else gprint("Attempt to restore key from graph, but did not find any key waiting\n");
+		}
+		else kw("OFFSET") {
 			m_info.setOffsetX(next_exp);
 			m_info.setOffsetY(next_exp);
 		}
@@ -274,7 +291,7 @@ GLEKeyBlockBase::GLEKeyBlockBase():
 		"OFF", "HEI", "POSITION", "POS", "BOXCOLOR", "SEPARATOR",
 		"LSTYLE", "JUSTIFY", "JUST", "DIST", "COLDIST", "TEXT",
 		"MARKER", "MSIZE", "MSCALE", "COLOR", "TEXTCOLOR", "FILL",
-		"PATTERN", "LINE", "LWIDTH", "TITLE", ""};
+		"PATTERN", "LINE", "LWIDTH", "TITLE", "WAIT", "RESTORE", ""};
 	for (int i = 0; commands[i][0] != 0; ++i) {
 		addKeyWord(commands[i]);
 	}
@@ -334,6 +351,7 @@ KeyInfo::KeyInfo() {
 	m_Compact = false;
 	m_NoLines = false;
 	m_Disabled = false;
+	m_Waiting = false;
 	m_BoxColor = 0;
 	m_ExtraY = 0.0;
 	m_BackgroundColor = g_get_fill_clear();
@@ -407,7 +425,7 @@ KeyEntry* KeyInfo::lastEntry() {
 }
 
 void draw_key(KeyInfo* info) {
-	if (info->getNbEntries() == 0) {
+	if (!info->isDrawable()) {
 		return;
 	}
 	GLEPoint savept;
@@ -753,7 +771,7 @@ void measure_key(KeyInfo* info) {
 }
 
 void draw_key_after_measure(KeyInfo* info) {
-	if (info->getNbEntries() == 0 || info->isDisabled()) {
+	if (!info->isDrawable()) {
 		return;
 	}
 	double save_hei;
@@ -926,6 +944,22 @@ KeyEntry::KeyEntry(int col) {
 	fill = new GLEColor();
 	fill->setTransparent(true);
 }
+
+KeyEntry& KeyEntry::operator=(const KeyEntry& other) {
+	for (int i=0; i<9; ++i) lstyle[i] = other.lstyle[i];
+	color = other.color;
+	textcolor = other.textcolor;
+	fill = other.fill;
+	marker = other.marker;
+	column = other.column;
+	msize = other.msize;
+	lwidth = other.lwidth;
+	descrip = other.descrip;
+	sepstyle = other.sepstyle;
+	sepdist = other.sepdist;
+	return *this;
+}
+
 
 KeyEntry::~KeyEntry() {
 }
