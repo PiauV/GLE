@@ -96,6 +96,8 @@
 #include "gle-base.h"
 #include "gle-const.h"
 
+#include "../justify.h"
+
 // what do we do with these?
 #include "../tokens/RefCount.h"
 #include "../tokens/StringKeyHash.h"
@@ -143,11 +145,11 @@ extern "C" {
 };
 
 enum GLEJustify {
-	GLEJustifyCC   = 0x011,  GLEJustifyTL     = 0x002,  GLEJustifyTC    = 0x012,
-	GLEJustifyTR   = 0x022,  GLEJustifyBL     = 0x000,  GLEJustifyBC    = 0x010,
-	GLEJustifyBR   = 0x020,  GLEJustifyLC     = 0x001,  GLEJustifyRC    = 0x021,
-	GLEJustifyLeft = 0x100,  GLEJustifyCenter = 0x110,  GLEJustifyRight = 0x120,
-	GLEJustifyCirc = 0x1011, GLEJusitfyBox    = 0x5011, GLEJustifyVert  = 0x2000,
+	GLEJustifyCC   = JUST_CC,    GLEJustifyTL     = JUST_TL,      GLEJustifyTC    = JUST_TC,
+	GLEJustifyTR   = JUST_TR,    GLEJustifyBL     = JUST_BL,      GLEJustifyBC    = JUST_BC,
+	GLEJustifyBR   = JUST_BR,    GLEJustifyLC     = JUST_LC,      GLEJustifyRC    = JUST_RC,
+	GLEJustifyLeft = JUST_LEFT,  GLEJustifyCenter = JUST_CENTER,  GLEJustifyRight = JUST_RIGHT,
+	GLEJustifyCirc = 0x1011,     GLEJusitfyBox    = 0x5011, GLEJustifyVert  = 0x2000,
 	GLEJustifyHorz = 0x3000
 
 // add LH CH RH BV CV TV

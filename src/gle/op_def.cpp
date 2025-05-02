@@ -38,6 +38,8 @@
 
 #include "op_def.h"
 #include "color.h"
+#include "justify.h"
+
 //using namespace std;
 /*--------------------------------------------------------------------------------------*/
 /* Pos = Offset to find the data                                                        */
@@ -98,28 +100,28 @@ struct op_key op_begin_text[] = {
 		{ "END", 	typ_end, 	0, 0 } };
 
 struct op_key op_justify[] = {
-		{ "LEFT", 	typ_switch, 	1, 0x100 },
-		{ "CENT", 	typ_switch, 	1, 0x110 },
-		{ "CENTER", 	typ_switch, 	1, 0x110 },
-		{ "CENTRE", 	typ_switch, 	1, 0x110 },
-		{ "RIGHT", 	typ_switch, 	1, 0x120 },
-		{ "LT",	 	typ_switch, 	1, 0x02 },
-		{ "TL",	 	typ_switch, 	1, 0x02 },
-		{ "CL",	 	typ_switch, 	1, 0x01 },
-		{ "LC",	 	typ_switch, 	1, 0x01 },
-		{ "BL",	 	typ_switch, 	1, 0x00 },
-		{ "LB",	 	typ_switch, 	1, 0x00 },
-		{ "CB",	 	typ_switch, 	1, 0x10 },
-		{ "BC",	 	typ_switch, 	1, 0x10 },
-		{ "RB",	 	typ_switch, 	1, 0x20 },
-		{ "BR",	 	typ_switch, 	1, 0x20 },
-		{ "CR",	 	typ_switch, 	1, 0x21 },
-		{ "RC",	 	typ_switch, 	1, 0x21 },
-		{ "TR",	 	typ_switch, 	1, 0x22 },
-		{ "RT",	 	typ_switch, 	1, 0x22 },
-		{ "TC",	 	typ_switch, 	1, 0x12 },
-		{ "CT",	 	typ_switch, 	1, 0x12 },
-		{ "CC",	 	typ_switch, 	1, 0x11 },
+		{ "LEFT", 	typ_switch, 	1, JUST_LEFT },
+		{ "CENT", 	typ_switch, 	1, JUST_CENTER },
+		{ "CENTER", 	typ_switch, 	1, JUST_CENTER },
+		{ "CENTRE", 	typ_switch, 	1, JUST_CENTRE },
+		{ "RIGHT", 	typ_switch, 	1, JUST_RIGHT },
+		{ "LT",	 	typ_switch, 	1, JUST_LT },
+		{ "TL",	 	typ_switch, 	1, JUST_TL },
+		{ "CL",	 	typ_switch, 	1, JUST_CL },
+		{ "LC",	 	typ_switch, 	1, JUST_LC },
+		{ "BL",	 	typ_switch, 	1, JUST_BL },
+		{ "LB",	 	typ_switch, 	1, JUST_LB },
+		{ "CB",	 	typ_switch, 	1, JUST_CB },
+		{ "BC",	 	typ_switch, 	1, JUST_BC },
+		{ "RB",	 	typ_switch, 	1, JUST_RB },
+		{ "BR",	 	typ_switch, 	1, JUST_BR },
+		{ "CR",	 	typ_switch, 	1, JUST_CR },
+		{ "RC",	 	typ_switch, 	1, JUST_RC },
+		{ "TR",	 	typ_switch, 	1, JUST_TR },
+		{ "RT",	 	typ_switch, 	1, JUST_RT },
+		{ "TC",	 	typ_switch, 	1, JUST_TC },
+		{ "CT",	 	typ_switch, 	1, JUST_CT },
+		{ "CC",	 	typ_switch, 	1, JUST_CC },
 		{ "CI",	 	typ_switch, 	1, 0x1011 },
 		{ "C",	 	typ_switch, 	1, 0x1011 },
 		{ "VI",	 	typ_switch, 	1, 0x2000 },

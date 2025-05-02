@@ -39,8 +39,8 @@
 struct op_key {
 	char name[256];
 	int typ;
-	int pos;
-	unsigned int idx;
+	int pos;          // Offset to find the data -> this is the order the items will be placed in the pcode
+	unsigned int idx; // For switches, which can only have one value
 };
 
 #define typ_end     0
