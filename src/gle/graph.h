@@ -307,6 +307,7 @@ void bar_reset();
 void doskip(char *s,int *ct);
 void store_window_bounds_to_vars();
 void do_dataset_key(int d);
+void do_fill_key(int f);
 void do_bigfile_compatibility();
 void ensureDataSetCreated(int d);
 
@@ -342,6 +343,7 @@ public:
 	int type; 	/* 1= x1,d1, 2=d1,x2, 3=d1,d2, 4=d1 */
 	GLERC<GLEColor> color;
 	double xmin, ymin, xmax, ymax;
+	std::string key_name;
 };
 
 class GLEDataSet;
