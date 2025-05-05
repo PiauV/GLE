@@ -3482,6 +3482,18 @@ void do_dataset_key(int d) {
 	}
 }
 
+void do_fill_key(int f) {
+	if (fd[f] != NULL && fd[f]->key_name != "") {
+		KeyEntry* entry = g_keyInfo->createEntry();
+		entry->fill = fd[f]->color;
+		entry->descrip = fd[f]->key_name;
+		if (g_get_tex_labels()) {
+			entry->descrip.insert(0, "\\tex{");
+			entry->descrip.append("}");
+		}
+	}
+}
+
 void do_dataset_key_entries()
 {
 	GLEArrayImpl* order = g_graphBlockData->getOrder()->getArray();
@@ -3489,7 +3501,7 @@ void do_dataset_key_entries()
 		if (order->getType(i) == GLEObjectTypeInt) {
 			do_dataset_key(order->getInt(i));
 		}
-		if (order->getType(i) == GLEObjectTypeClassInstance) {
+		else if (order->getType(i) == GLEObjectTypeClassInstance) {
 			GLEClassInstance* classInstance = static_cast<GLEClassInstance*>(order->getObject(i));
 			if (classInstance->getDefinition() == g_graphBlockData->getGraphBlockBase()->getClassDefinitions()->getKeySeparator()) {
 				if (i == 0 || i + 1 == order->size()) {
@@ -3500,6 +3512,10 @@ void do_dataset_key_entries()
 					entry->sepstyle = classInstance->getArray()->getInt(0);
 				}
 				g_keyInfo->addColumn();
+			}
+			else if (classInstance->getDefinition() == g_graphBlockData->getGraphBlockBase()->getClassDefinitions()->getFill()) {
+				int index = classInstance->getArray()->getInt(0);
+				do_fill_key(index);
 			}
 		}
 	}

@@ -720,6 +720,8 @@ void do_fill(int& ct, GLEGraphBlockInstance* graphBlock) {
 		   fd[nfd]->ymin = next_exp;
 	   } else kw("YMAX") {
 		   fd[nfd]->ymax = next_exp;
+	   } else kw("KEY") {
+		   next_vquote_cpp(fd[nfd]->key_name);
 	   } else {
 		g_throw_parser_error("unrecognised fill sub command: '", tk[ct], "'");
 	   }
