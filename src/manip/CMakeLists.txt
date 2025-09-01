@@ -41,5 +41,4 @@ target_include_directories(manip SYSTEM PRIVATE ${CURSES_INCLUDE_DIRS})
 set_target_properties(manip PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
 
 install(TARGETS manip
-		CONFIGURATIONS Release Debug
-		RUNTIME )
+        RUNTIME )

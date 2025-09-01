@@ -583,7 +583,6 @@ install(FILES
 	../doc/LICENSE.txt
 	../doc/README.txt
 	../doc/ChangeLog.txt
-	CONFIGURATIONS Release Debug
 	DESTINATION ./doc
 )
 #
@@ -592,7 +591,6 @@ install(FILES
 install(DIRECTORY
 	${GLE_EXAMPLES_LIBRARY_PATH}/include/
 	DESTINATION ./gleinc
-	CONFIGURATIONS Release Debug
 	OPTIONAL
 	PATTERN "*.gle"
 
@@ -603,7 +601,6 @@ install(DIRECTORY
 install(FILES
 	${GLE_USER_MANUAL_PATH}/gle-manual.pdf
 	DESTINATION ./doc
-	CONFIGURATIONS Release Debug
 	OPTIONAL
 )
 

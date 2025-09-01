@@ -197,10 +197,8 @@ if(APPLE AND NOT LibLZMA_FOUND)
 endif()
 
 install(TARGETS gle
-		CONFIGURATIONS Release Debug
-		RUNTIME )
+        RUNTIME )
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/glerc
-		CONFIGURATIONS Release Debug
-		DESTINATION . )
+        DESTINATION . )
 
