@@ -12,7 +12,6 @@ endif()
 set_target_properties(makefmt PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}) 
 
 install(TARGETS makefmt
-		CONFIGURATIONS Release Debug
-		RUNTIME )
+        RUNTIME )
 
 

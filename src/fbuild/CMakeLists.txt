@@ -10,6 +10,5 @@ endif()
 set_target_properties(fbuild PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}) 
 
 install(TARGETS fbuild
-		CONFIGURATIONS Release Debug
-		RUNTIME )
+        RUNTIME )
 

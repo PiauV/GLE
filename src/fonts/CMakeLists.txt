@@ -309,6 +309,5 @@ install(FILES
 	${ADOBE_FMT_FILES} 
 	${FMT_FILES} 
 	${FVE_FILES}
-	CONFIGURATIONS Release Debug
 	DESTINATION font)
 
