@@ -61,7 +61,7 @@ set(output_file mkinittex.log)
 add_custom_command(OUTPUT ${output_file}
                    DEPENDS gle ${inittex_file}
                    COMMAND ${CMAKE_COMMAND} -E copy ${inittex_file} $<TARGET_FILE_DIR:gle>
-                   COMMAND $<TARGET_FILE:gle> -mkinittex > ${output_file} 2>&1
+                   COMMAND ${CMAKE_COMMAND} -E env GLE_TOP=$<TARGET_FILE_DIR:gle> $<TARGET_FILE:gle> -mkinittex > ${output_file} 2>&1
                    COMMENT "Generating inittex.ini file from ${inittex_file}"
 )
 
