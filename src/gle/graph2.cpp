@@ -3956,6 +3956,10 @@ void GLEColorMapBitmap::plotData(GLEZData* zdata, GLEByteStream* output) {
 	double zmax = zdata->getZMax();
 	if (m_map->hasZMin()) zmin = m_map->getZMin();
 	if (m_map->hasZMax()) zmax = m_map->getZMax();
+	if (m_map->isLogZ()){
+		zmin = log(max(1e-26,zmin));
+		zmax = log(max(1e-26,zmax));
+	}
 	IpolDoubleMatrix ipd(zdata->getData(), zdata->getNX(), zdata->getNY());
 	std::unique_ptr<Ipol> ipol;
 	if (m_map->getIpolType() == IPOL_TYPE_BICUBIC) { // default
@@ -3977,10 +3981,18 @@ void GLEColorMapBitmap::plotData(GLEZData* zdata, GLEByteStream* output) {
 			double ypos = gle_limit_range((xy.getY() - bounds->getYMin()) / bounds->getHeight(), 0.0, 1.0);
 			double zvalue = 0.0;
 			if (m_map->isInverted()) {
-				zvalue = (zmax - ipol->ipol(xpos, ypos)) / scale;
+				if (m_map->isLogZ())
+					zvalue = (zmax - log(ipol->ipol(xpos, ypos))) / scale;
+				else
+					zvalue = (zmax - ipol->ipol(xpos, ypos)) / scale;
 			} else {
-				zvalue = (ipol->ipol(xpos, ypos) - zmin) / scale;
+				if (m_map->isLogZ())
+					zvalue = (log(ipol->ipol(xpos, ypos)) - zmin) / scale;
+				else
+					zvalue = (ipol->ipol(xpos, ypos) - zmin) / scale;
 			}
+			if (gle_isnan(zvalue)) zvalue = -1.;
+			else if (zvalue > 1.) zvalue = 1.;
 			updateScanLine(&pos, zvalue);
 		}
 		output->send(m_scanLine, getScanlineSize());

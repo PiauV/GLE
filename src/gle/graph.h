@@ -608,6 +608,7 @@ public:
 	bool m_has_zmin;
 	bool m_has_zmax;
 	bool m_invert;
+	bool m_logz;
 	bool m_haspal;
 	IpolType m_ipolType;
 	GLEZData* m_Data;
@@ -638,6 +639,8 @@ public:
 	inline GLEZData* getData() { return m_Data; }
 	inline void setIpolType(IpolType type) { m_ipolType = type; }
 	inline IpolType getIpolType() const { return m_ipolType; }
+	inline bool isLogZ() const { return m_logz; }
+	inline void setLogZ(bool logz) { m_logz = logz; }
 };
 
 

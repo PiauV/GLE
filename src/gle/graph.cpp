@@ -838,6 +838,7 @@ void do_colormap(int& ct) {
 		else kw("INVERT") g_colormap->setInvert(true);
 		else kw("ZMIN") g_colormap->setZMin(next_exp);
 		else kw("ZMAX") g_colormap->setZMax(next_exp);
+		else kw("LOGZ") g_colormap->setLogZ(true);
 		else kw("INTERPOLATE") {
 			string tmp;
 			next_str_cpp(tmp);
@@ -875,6 +876,8 @@ void do_matrix(int& ct) {
 	while (ct <= ntk) {
 		kw("ZMIN") g_colormap->setZMin(next_exp);
 		else kw("ZMAX") g_colormap->setZMax(next_exp);
+		else kw ("LOGZ") g_colormap->setLogZ(true);
+		else kw("INVERT") g_colormap->setInvert(true);
 		else kw("PALETTE") {
 			string tmp;
 			next_str_cpp(tmp);
